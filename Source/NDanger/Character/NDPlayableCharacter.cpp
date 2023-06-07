@@ -30,7 +30,9 @@ void ANDPlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		}
 		if (ensureMsgf(AimDirectionIA, TEXT("AimDirectionIA is not set")))
 		{
+			PlayerEnhancedInputComponent->BindAction(AimDirectionIA, ETriggerEvent::Started, this, &ANDPlayableCharacter::AimDirectionIAHandler);
 			PlayerEnhancedInputComponent->BindAction(AimDirectionIA, ETriggerEvent::Triggered, this, &ANDPlayableCharacter::AimDirectionIAHandler);
+			PlayerEnhancedInputComponent->BindAction(AimDirectionIA, ETriggerEvent::Completed, this, &ANDPlayableCharacter::AimDirectionIAHandler);
 		}
 		if (ensureMsgf(JumpIA, TEXT("JumpIA is not set")))
 		{
@@ -69,6 +71,7 @@ void ANDPlayableCharacter::MoveDirectionIAHandler(const FInputActionValue& Value
 
 void ANDPlayableCharacter::AimDirectionIAHandler(const FInputActionValue& Value)
 {
+	AimValue = Value.Get<FVector2D>();
 }
 
 void ANDPlayableCharacter::JumpStartIAHandler()

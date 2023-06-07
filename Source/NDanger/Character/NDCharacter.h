@@ -18,11 +18,13 @@ public:
 
 protected:
 	/** Gets the character rotator corresponding to a specific value. */
-	FRotator GetCharacterFacingRotator(float Value);
+	FRotator GetCharacterFacingRotator(float DirectionWorldX);
 
 protected:
 	// Replace with a lerped float
 	float MoveXValue = 0.0f;
+
+	FVector2D AimValue = FVector2D::ZeroVector;
 	
 	/** True the frame the character starts jumping. */
 	bool bStartJump = false;
