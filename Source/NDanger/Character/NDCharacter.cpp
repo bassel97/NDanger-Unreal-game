@@ -1,10 +1,18 @@
 // Created by Bassel Mostafa https://bassel97.github.io/
 
 #include "NDCharacter.h"
+#include "NDanger/Subsystems/LerpValues/NDLerpValuesSubsystem.h"
 
 ANDCharacter::ANDCharacter()
 {
  	PrimaryActorTick.bCanEverTick = true;
+}
+
+void ANDCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CharacterXDirection = GetWorld()->GetSubsystem<UNDLerpValuesSubsystem>()->CreateLerpedFloat(10.0f);
 }
 
 void ANDCharacter::Tick(float DeltaTime)
@@ -18,10 +26,13 @@ void ANDCharacter::Tick(float DeltaTime)
 	// Handling rotation logic
 	//The rotation direction is only equal to the movement direction if we aim is zero. 
 	const float DiscreteXAimValue = FMath::Floor(AimValue.X + 0.5f);
-	const float CharacterXDirection = (DiscreteXAimValue == 0) ? MoveXValue : DiscreteXAimValue;
-	const FRotator CharacterFacingRotator = GetCharacterFacingRotator(CharacterXDirection);
-	FaceRotation(CharacterFacingRotator);
-
+	if (CharacterXDirection.IsValid())
+	{
+		*CharacterXDirection.Pin() = (DiscreteXAimValue == 0) ? MoveXValue : DiscreteXAimValue;
+		const FRotator CharacterFacingRotator = GetCharacterFacingRotator(*CharacterXDirection.Pin());
+		FaceRotation(CharacterFacingRotator);
+	}
+	
 
 	// Handling Jumping logic
 	if (bStartJump)

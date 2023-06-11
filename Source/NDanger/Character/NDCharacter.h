@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NDanger/Subsystems/LerpValues/NDLerpValues.h"
 #include "NDCharacter.generated.h"
 
 UCLASS()
@@ -13,7 +14,7 @@ class NDANGER_API ANDCharacter : public ACharacter
 
 public:
 	ANDCharacter();
-
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 protected:
@@ -32,4 +33,7 @@ protected:
 	bool bStopJump = false;
 	/** True when the character is jumping. */
 	bool bIsJumping = false;
+
+private:
+	TWeakPtr<LerpedValue<float>> CharacterXDirection;
 };
